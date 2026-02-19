@@ -1,0 +1,27 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-all-probes-flexible
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: require-probes
+      match:
+        any:
+        - resources:
+            kinds:
+              - Deployment
+              - StatefulSet
+              - DaemonSet
+      validate:
+        message: "All containers must have startup, readiness, and liveness probes defined."
+        pattern:
+          spec:
+            template:
+              spec:
+                containers:
+                  - name: "*"
+                    livenessProbe: {}
+                    readinessProbe: {}
+                    startupProbe: {}

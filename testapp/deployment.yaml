@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: testapp
+  namespace: testapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: testapp
+  template:
+    metadata:
+      labels:
+        app: testapp
+    spec:
+      containers:
+        - name: testapp
+          image: hashicorp/http-echo:latest
+          args:
+            - "-text=Test App is Working!"
+          ports:
+          - containerPort: 5678
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+          startupProbe:
+            httpGet:
+              path: /
+              port: 5678
+            failureThreshold: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5678
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5678
+            initialDelaySeconds: 15
+            periodSeconds: 20
