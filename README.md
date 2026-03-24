@@ -613,7 +613,7 @@ By the end, we built three practical policies, watched them report violations, b
 
 ## Cleanup
 
-If you followed along, run the command to clean everything up:
+If you followed along, run the commands to clean everything up:
 ```sh
 kubectl delete -f testapp
 helm uninstall kyverno --namespace kyverno
